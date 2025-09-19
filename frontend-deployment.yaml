@@ -1,0 +1,60 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krishi-frontend
+  namespace: digital-krishi-officer
+  labels:
+    app: krishi-frontend
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: krishi-frontend
+  template:
+    metadata:
+      labels:
+        app: krishi-frontend
+        tier: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: digitalkrishi/frontend:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: krishi-frontend
+  namespace: digital-krishi-officer
+  labels:
+    app: krishi-frontend
+spec:
+  selector:
+    app: krishi-frontend
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP

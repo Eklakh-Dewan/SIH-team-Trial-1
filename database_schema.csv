@@ -1,0 +1,87 @@
+table,column,definition,description
+farmers,id,SERIAL PRIMARY KEY,Farmer profile and authentication data
+farmers,phone,VARCHAR(15) UNIQUE NOT NULL,Farmer profile and authentication data
+farmers,name,VARCHAR(255),Farmer profile and authentication data
+farmers,location_district,VARCHAR(100),Farmer profile and authentication data
+farmers,location_panchayat,VARCHAR(100),Farmer profile and authentication data
+farmers,location_coordinates,POINT,Farmer profile and authentication data
+farmers,primary_crops,TEXT[],Farmer profile and authentication data
+farmers,farm_size_acres,"DECIMAL(8,2)",Farmer profile and authentication data
+farmers,language_preference,VARCHAR(10) DEFAULT 'ml',Farmer profile and authentication data
+farmers,created_at,TIMESTAMP DEFAULT NOW(),Farmer profile and authentication data
+farmers,last_active,TIMESTAMP DEFAULT NOW(),Farmer profile and authentication data
+farmers,is_verified,BOOLEAN DEFAULT FALSE,Farmer profile and authentication data
+queries,id,SERIAL PRIMARY KEY,Farmer queries and AI responses
+queries,farmer_id,INTEGER REFERENCES farmers(id),Farmer queries and AI responses
+queries,query_text,TEXT NOT NULL,Farmer queries and AI responses
+queries,query_type,"VARCHAR(20) CHECK (query_type IN ('voice', 'text', 'image'))",Farmer queries and AI responses
+queries,voice_file_path,VARCHAR(500),Farmer queries and AI responses
+queries,image_file_path,VARCHAR(500),Farmer queries and AI responses
+queries,detected_intent,VARCHAR(100),Farmer queries and AI responses
+queries,detected_entities,JSONB,Farmer queries and AI responses
+queries,cv_detection_results,JSONB,Farmer queries and AI responses
+queries,cv_confidence,"DECIMAL(3,2)",Farmer queries and AI responses
+queries,rag_context,TEXT,Farmer queries and AI responses
+queries,ai_response,TEXT,Farmer queries and AI responses
+queries,ai_confidence,"DECIMAL(3,2)",Farmer queries and AI responses
+queries,response_language,VARCHAR(10),Farmer queries and AI responses
+queries,safety_flags,TEXT[],Farmer queries and AI responses
+queries,is_escalated,BOOLEAN DEFAULT FALSE,Farmer queries and AI responses
+queries,escalation_reason,VARCHAR(200),Farmer queries and AI responses
+queries,created_at,TIMESTAMP DEFAULT NOW(),Farmer queries and AI responses
+queries,processed_at,TIMESTAMP,Farmer queries and AI responses
+queries,response_time_ms,INTEGER,Farmer queries and AI responses
+escalations,id,SERIAL PRIMARY KEY,Cases escalated to agricultural officers
+escalations,query_id,INTEGER REFERENCES queries(id),Cases escalated to agricultural officers
+escalations,farmer_id,INTEGER REFERENCES farmers(id),Cases escalated to agricultural officers
+escalations,assigned_officer_id,INTEGER REFERENCES officers(id),Cases escalated to agricultural officers
+escalations,status,"VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'assigned', 'in_progress', 'resolved', 'closed'))",Cases escalated to agricultural officers
+escalations,priority,"VARCHAR(10) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'urgent'))",Cases escalated to agricultural officers
+escalations,officer_response,TEXT,Cases escalated to agricultural officers
+escalations,resolution_notes,TEXT,Cases escalated to agricultural officers
+escalations,created_at,TIMESTAMP DEFAULT NOW(),Cases escalated to agricultural officers
+escalations,assigned_at,TIMESTAMP,Cases escalated to agricultural officers
+escalations,resolved_at,TIMESTAMP,Cases escalated to agricultural officers
+officers,id,SERIAL PRIMARY KEY,Agricultural officers who handle escalations
+officers,employee_id,VARCHAR(20) UNIQUE NOT NULL,Agricultural officers who handle escalations
+officers,name,VARCHAR(255) NOT NULL,Agricultural officers who handle escalations
+officers,designation,VARCHAR(100),Agricultural officers who handle escalations
+officers,department,VARCHAR(100),Agricultural officers who handle escalations
+officers,phone,VARCHAR(15),Agricultural officers who handle escalations
+officers,email,VARCHAR(255),Agricultural officers who handle escalations
+officers,assigned_districts,TEXT[],Agricultural officers who handle escalations
+officers,specializations,TEXT[],Agricultural officers who handle escalations
+officers,is_active,BOOLEAN DEFAULT TRUE,Agricultural officers who handle escalations
+officers,created_at,TIMESTAMP DEFAULT NOW(),Agricultural officers who handle escalations
+officers,last_login,TIMESTAMP,Agricultural officers who handle escalations
+feedback,id,SERIAL PRIMARY KEY,User feedback on AI responses
+feedback,query_id,INTEGER REFERENCES queries(id),User feedback on AI responses
+feedback,farmer_id,INTEGER REFERENCES farmers(id),User feedback on AI responses
+feedback,rating,INTEGER CHECK (rating BETWEEN 1 AND 5),User feedback on AI responses
+feedback,feedback_type,"VARCHAR(20) CHECK (feedback_type IN ('helpful', 'not_helpful', 'incorrect', 'incomplete'))",User feedback on AI responses
+feedback,comments,TEXT,User feedback on AI responses
+feedback,created_at,TIMESTAMP DEFAULT NOW(),User feedback on AI responses
+knowledge_base,id,SERIAL PRIMARY KEY,Kerala agriculture knowledge for RAG system
+knowledge_base,title,VARCHAR(500) NOT NULL,Kerala agriculture knowledge for RAG system
+knowledge_base,content,TEXT NOT NULL,Kerala agriculture knowledge for RAG system
+knowledge_base,content_type,"VARCHAR(50) CHECK (content_type IN ('crop_guide', 'disease_treatment', 'pest_control', 'government_scheme', 'weather_advisory', 'market_info'))",Kerala agriculture knowledge for RAG system
+knowledge_base,crops,TEXT[],Kerala agriculture knowledge for RAG system
+knowledge_base,diseases,TEXT[],Kerala agriculture knowledge for RAG system
+knowledge_base,pests,TEXT[],Kerala agriculture knowledge for RAG system
+knowledge_base,applicable_districts,TEXT[],Kerala agriculture knowledge for RAG system
+knowledge_base,applicable_seasons,TEXT[],Kerala agriculture knowledge for RAG system
+knowledge_base,source,VARCHAR(200),Kerala agriculture knowledge for RAG system
+knowledge_base,source_url,VARCHAR(500),Kerala agriculture knowledge for RAG system
+knowledge_base,language,VARCHAR(10) DEFAULT 'en',Kerala agriculture knowledge for RAG system
+knowledge_base,last_updated,TIMESTAMP DEFAULT NOW(),Kerala agriculture knowledge for RAG system
+knowledge_base,is_verified,BOOLEAN DEFAULT FALSE,Kerala agriculture knowledge for RAG system
+audit_logs,id,SERIAL PRIMARY KEY,System audit trail for security and compliance
+audit_logs,user_id,INTEGER,System audit trail for security and compliance
+audit_logs,user_type,"VARCHAR(20) CHECK (user_type IN ('farmer', 'officer', 'admin'))",System audit trail for security and compliance
+audit_logs,action,VARCHAR(100) NOT NULL,System audit trail for security and compliance
+audit_logs,resource_type,VARCHAR(50),System audit trail for security and compliance
+audit_logs,resource_id,INTEGER,System audit trail for security and compliance
+audit_logs,ip_address,INET,System audit trail for security and compliance
+audit_logs,user_agent,TEXT,System audit trail for security and compliance
+audit_logs,metadata,JSONB,System audit trail for security and compliance
+audit_logs,created_at,TIMESTAMP DEFAULT NOW(),System audit trail for security and compliance

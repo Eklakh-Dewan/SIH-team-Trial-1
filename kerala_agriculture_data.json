@@ -1,0 +1,171 @@
+{
+  "major_crops": [
+    {
+      "name": "Rice",
+      "malayalam": "നെൽ",
+      "seasons": [
+        "Kharif",
+        "Rabi"
+      ],
+      "districts": [
+        "Palakkad",
+        "Thrissur",
+        "Malappuram"
+      ]
+    },
+    {
+      "name": "Coconut",
+      "malayalam": "തെങ്ങ്",
+      "seasons": [
+        "Year-round"
+      ],
+      "districts": [
+        "All districts"
+      ]
+    },
+    {
+      "name": "Rubber",
+      "malayalam": "റബ്ബർ",
+      "seasons": [
+        "Year-round"
+      ],
+      "districts": [
+        "Kottayam",
+        "Pathanamthitta",
+        "Idukki"
+      ]
+    },
+    {
+      "name": "Black Pepper",
+      "malayalam": "കുരുമുളക്",
+      "seasons": [
+        "Post-monsoon"
+      ],
+      "districts": [
+        "Wayanad",
+        "Idukki",
+        "Kozhikode"
+      ]
+    },
+    {
+      "name": "Cardamom",
+      "malayalam": "ഏലം",
+      "seasons": [
+        "October-December"
+      ],
+      "districts": [
+        "Idukki",
+        "Wayanad"
+      ]
+    },
+    {
+      "name": "Banana",
+      "malayalam": "വാഴ",
+      "seasons": [
+        "Year-round"
+      ],
+      "districts": [
+        "Thiruvananthapuram",
+        "Thrissur",
+        "Palakkad"
+      ]
+    },
+    {
+      "name": "Arecanut",
+      "malayalam": "അടയ്ക്ക",
+      "seasons": [
+        "Year-round"
+      ],
+      "districts": [
+        "Kasaragod",
+        "Kannur",
+        "Kozhikode"
+      ]
+    }
+  ],
+  "common_diseases": [
+    {
+      "name": "Rice Blast",
+      "malayalam": "നെൽ ബ്ലാസ്റ്റ്",
+      "crops": [
+        "Rice"
+      ],
+      "symptoms": "Leaf spots, neck rot",
+      "treatment": "Carbendazim spray"
+    },
+    {
+      "name": "Coconut Root Wilt",
+      "malayalam": "തെങ്ങിന്റെ വേരുചീയൽ",
+      "crops": [
+        "Coconut"
+      ],
+      "symptoms": "Yellowing of leaves",
+      "treatment": "Bordeaux mixture"
+    },
+    {
+      "name": "Rubber Leaf Fall",
+      "malayalam": "റബ്ബർ ഇല വീഴ്ച",
+      "crops": [
+        "Rubber"
+      ],
+      "symptoms": "Premature leaf fall",
+      "treatment": "Copper fungicide"
+    },
+    {
+      "name": "Pepper Quick Wilt",
+      "malayalam": "കുരുമുളക് വാട്ടം",
+      "crops": [
+        "Black Pepper"
+      ],
+      "symptoms": "Sudden wilting",
+      "treatment": "Trichoderma application"
+    },
+    {
+      "name": "Banana Bunchy Top",
+      "malayalam": "വാഴ ബഞ്ചി ടോപ്പ്",
+      "crops": [
+        "Banana"
+      ],
+      "symptoms": "Stunted growth",
+      "treatment": "Remove affected plants"
+    }
+  ],
+  "safety_rules": {
+    "banned_pesticides": [
+      "Endosulfan",
+      "Methyl Parathion",
+      "Phorate",
+      "Triazophos",
+      "Alachlor",
+      "Lannate"
+    ],
+    "restricted_pesticides": [
+      {
+        "name": "2,4-D",
+        "restrictions": [
+          "Not for rice after panicle initiation"
+        ]
+      },
+      {
+        "name": "Monocrotophos",
+        "restrictions": [
+          "Banned for vegetables"
+        ]
+      }
+    ],
+    "dosage_limits": {
+      "Carbendazim": {
+        "max_concentration": "0.1%",
+        "max_applications": 2
+      },
+      "Mancozeb": {
+        "max_concentration": "0.25%",
+        "max_applications": 3
+      },
+      "Copper fungicides": {
+        "max_concentration": "0.3%",
+        "max_applications": 3
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+
+# PostgreSQL StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: krishi-postgres
+  namespace: digital-krishi-officer
+spec:
+  serviceName: krishi-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: krishi-postgres
+  template:
+    metadata:
+      labels:
+        app: krishi-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "krishi_db"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: krishi-secrets
+              key: db-username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: krishi-secrets
+              key: db-password
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1
+            memory: 2Gi
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+          initialDelaySeconds: 10
+          periodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "fast-ssd"
+      resources:
+        requests:
+          storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: krishi-postgres
+  namespace: digital-krishi-officer
+spec:
+  selector:
+    app: krishi-postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+  clusterIP: None
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krishi-redis
+  namespace: digital-krishi-officer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: krishi-redis
+  template:
+    metadata:
+      labels:
+        app: krishi-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        command: ["redis-server", "--appendonly", "yes"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /data
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      volumes:
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: krishi-redis-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: krishi-redis
+  namespace: digital-krishi-officer
+spec:
+  selector:
+    app: krishi-redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+  type: ClusterIP
